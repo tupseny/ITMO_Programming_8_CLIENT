@@ -23,6 +23,7 @@ public class MessageReceiver {
 		byte[] receivedByteArray = new byte[messageLength];
 		DatagramPacket receivedPacket =
 				new DatagramPacket(receivedByteArray, messageLength);
+
 		socket.receive(receivedPacket);
 	}
 

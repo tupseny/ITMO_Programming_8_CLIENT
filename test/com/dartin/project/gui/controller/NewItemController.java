@@ -120,47 +120,89 @@ public class NewItemController {
 */
 package com.dartin.project.gui.controller;
 
-import com.dartin.project.gui.NewItemWindow;
-import javafx.application.Application;
+import com.dartin.project.exception.NotValidSizeException;
+import com.dartin.project.gui.NewItemModel;
+import com.dartin.util.Item;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
+import java.time.LocalDate;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class NewItemController {
 
 	private static final Pattern PATTERN_WORD = Pattern.compile("[[:alpha:]]+");
-	private NewItemWindow controllingApplication;
+	private NewItemModel model;
+	private Stage stage;
+	private boolean isOkClicked;
 
-	public TextField textFieldName;
-	public Slider sliderSize;
-	public DatePicker datePicker;
-	public ChoiceBox choiceBoxUsage;
+	@FXML
+	private TextField textFieldName;
+	@FXML
+	private Slider sliderSize;
+	@FXML
+	private DatePicker datePicker;
+	@FXML
+	private ChoiceBox choiceBoxUsage;
+	@FXML
+	private Button okBut;
+	@FXML
+	private Button cancelBut;
 
-	public void handleButtonOk(ActionEvent actionEvent) {
-		boolean dataValidated = validateData();
-		if (dataValidated) {
-			controllingApplication.returnResults(
-					textFieldName.getText(),
-					choiceBoxUsage.getValue().toString(),
-					sliderSize.getLabelFormatter().toString(sliderSize.getValue())
-			);
-		}
-		controllingApplication.onCloseRequest();
+	@FXML
+	private void handleButtonOk(ActionEvent actionEvent) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("name", textFieldName.getText());
+		map.put("usage", choiceBoxUsage.getValue().toString());
+		map.put("size", Item.Size.LARGE); //sliderSize.getLabelFormatter().toString(sliderSize.getValue())
+		model.loadNewItemData(map);
+		isOkClicked = true;
+		stage.close();
 	}
 
-	public void handleButtonCancel(ActionEvent actionEvent) {
-		controllingApplication.onCloseRequest();
+	@FXML
+	private void handleButtonCancel(ActionEvent actionEvent) {
+		isOkClicked = false;
+		stage.close();
 	}
 
-	private boolean validateData() {
-		return !textFieldName.getText().matches(PATTERN_WORD.toString());
+	@FXML
+	private void initialize(){
+		ObservableList<String> list = FXCollections.observableArrayList(
+				"Wear", "Throw", "Eat");
+
+
+		textFieldName.setPromptText("NAME");
+		datePicker.setValue(LocalDate.now());
+		choiceBoxUsage.setItems(list);
+		choiceBoxUsage.setValue(choiceBoxUsage.getItems().get(0).toString());
 	}
 
-	public void setControllingApplication(NewItemWindow controllingApplication) {
-		this.controllingApplication = controllingApplication;
+	public void setModel(NewItemModel model){
+		this.model = model;
 	}
+
+	public void loadFields(Map<String, Object> map){
+		textFieldName.setText((String) map.get("name"));
+		sliderSize.setMax(model.getMaxSliderValue());
+		sliderSize.setLabelFormatter(model.getLabelFormatter());
+		datePicker.setValue((LocalDate) map.get("date"));
+		choiceBoxUsage.setValue((String) map.get("usage"));
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+
+	public boolean isOkClicked() {
+		return isOkClicked;
+	}
+
+
 }
