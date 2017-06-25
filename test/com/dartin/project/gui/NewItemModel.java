@@ -3,7 +3,6 @@ package com.dartin.project.gui;
 import com.dartin.project.AppLauncher;
 import com.dartin.project.exception.NotValidSizeException;
 import com.dartin.util.Item;
-import javafx.scene.control.TreeItem;
 import javafx.util.StringConverter;
 
 import java.util.Arrays;
@@ -13,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Martin on 21.06.2017.
  */
-public class NewItemModel{
+public class NewItemModel {
     private AppLauncher app;
     private Item item;
 
@@ -25,17 +24,17 @@ public class NewItemModel{
         return true;
     }
 
-    public void loadNewItemData(Map<String, Object> map){
-        if (validateData()){
+    public void loadNewItemData(Map<String, Object> map) {
+        if (validateData()) {
             setItemData(app.convertMap(map));
         }
     }
 
-    public void setItemData(Item item){
+    public void setItemData(Item item) {
         this.item = item;
     }
 
-    public Item getItem(){
+    public Item getItem() {
         return item;
     }
 
@@ -66,7 +65,7 @@ public class NewItemModel{
     public String convertDoubleToSize(double value) throws NotValidSizeException {
         List<Item.Size> list = Arrays.asList(Item.Size.values());
         value -= 1;
-        for(Item.Size size: list){
+        for (Item.Size size : list) {
             if (list.indexOf(size) == (int) value) return size.toString();
         }
         throw new NotValidSizeException("Cant find size with index " + (int) value);
@@ -75,15 +74,15 @@ public class NewItemModel{
     public double convertSizeToDouble(String value) throws NotValidSizeException {
         List<Item.Size> list = Arrays.asList(Item.Size.values());
 
-        for(Item.Size size: list){
-            if (size.toString().equals(value)){
+        for (Item.Size size : list) {
+            if (size.toString().equals(value)) {
                 return list.indexOf(size);
             }
         }
         throw new NotValidSizeException("Not valid size");
     }
 
-    public double getMaxSliderValue(){
+    public double getMaxSliderValue() {
         return Item.Size.values().length;
     }
 }

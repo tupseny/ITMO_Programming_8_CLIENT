@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="pro-lab-client:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/pro_lab_client_jar</output-path>
+  <artifact type="jar" name="clientStart">
+    <output-path>$PROJECT_DIR$/out/artifacts/clientStart</output-path>
     <root id="archive" name="pro-lab-client.jar">
       <element id="module-output" name="pro-lab-client" />
       <element id="module-test-output" name="pro-lab-client" />

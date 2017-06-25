@@ -11,46 +11,46 @@ import java.util.Set;
 
 public class ClientData {
 
-	private Set<Item> collectionCopy;
-	private OnClientCollectionModifiedListener onClientCollectionModifiedListener;
-	public static final int CLIENT_ID = LocalDateTime.now().hashCode();
+    private Set<Item> collectionCopy;
+    private OnClientCollectionModifiedListener onClientCollectionModifiedListener;
+    public static final int CLIENT_ID = LocalDateTime.now().hashCode();
 
-	private static ClientData ourInstance = new ClientData();
+    private static ClientData ourInstance = new ClientData();
 
-	public static ClientData getInstance() {
-		return ourInstance;
-	}
+    public static ClientData getInstance() {
+        return ourInstance;
+    }
 
-	private ClientData() {
-		collectionCopy = new HashSet<>();
-		collectionCopy.add(new Item("name", "usage", "small"));
-	}
+    private ClientData() {
+        collectionCopy = new HashSet<>();
+        collectionCopy.add(new Item("name", "usage", "small"));
+    }
 
-	public int getClientId() {
-		return CLIENT_ID;
-	}
+    public int getClientId() {
+        return CLIENT_ID;
+    }
 
-	public OnClientCollectionModifiedListener getOnClientCollectionModifiedListener() {
-		return onClientCollectionModifiedListener;
-	}
+    public OnClientCollectionModifiedListener getOnClientCollectionModifiedListener() {
+        return onClientCollectionModifiedListener;
+    }
 
-	public void setOnClientCollectionModifiedListener
-	(OnClientCollectionModifiedListener listener) {
-		onClientCollectionModifiedListener = listener;
-	}
+    public void setOnClientCollectionModifiedListener
+            (OnClientCollectionModifiedListener listener) {
+        onClientCollectionModifiedListener = listener;
+    }
 
-	public Set<Item> getCollectionCopy() {
-		return collectionCopy;
-	}
+    public Set<Item> getCollectionCopy() {
+        return collectionCopy;
+    }
 
-	public Tree<String> getTreeCollectionCopy() {
-		return UniversalConverter.itemSetToTree(collectionCopy);
-	}
+    public Tree<String> getTreeCollectionCopy() {
+        return UniversalConverter.itemSetToTree(collectionCopy);
+    }
 
-	public void setCollectionCopy(Set<Item> newCopy) {
-		collectionCopy = newCopy;
-		if (onClientCollectionModifiedListener != null) {
-			onClientCollectionModifiedListener.onHandle(collectionCopy);
-		}
-	}
+    public void setCollectionCopy(Set<Item> newCopy) {
+        collectionCopy = newCopy;
+        if (onClientCollectionModifiedListener != null) {
+            onClientCollectionModifiedListener.onHandle(collectionCopy);
+        }
+    }
 }

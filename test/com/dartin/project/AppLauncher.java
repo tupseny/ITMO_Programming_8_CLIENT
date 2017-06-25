@@ -5,7 +5,6 @@ import com.dartin.project.gui.CollectionOverviewModel;
 import com.dartin.project.gui.NewItemModel;
 import com.dartin.project.gui.controller.CollectionOverviewController;
 import com.dartin.project.gui.controller.NewItemController;
-import com.dartin.project.net.MessageReceiver;
 import com.dartin.util.Item;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,13 +15,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class AppLauncher extends Application{
+@SuppressWarnings("FieldCanBeLocal")
+public class AppLauncher extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
@@ -32,11 +30,11 @@ public class AppLauncher extends Application{
     private final String WINDOW_TITLE = "ITMO BEST LAB EVER BY 666DEN4UK666 AND XXXAWESOMEMARTINXXX Client"; //lol
 
     public static void main(String[] args) {
-		launch(args);
-	}
+        launch(args);
+    }
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle(WINDOW_TITLE);
         primaryStage.setResizable(false);
@@ -46,10 +44,10 @@ public class AppLauncher extends Application{
         controller.setWaitCollection(true);
         overviewModel.getNewRoot();
 
-	}
+    }
 
     private void loadCollectionOverview() {
-        try{
+        try {
             overviewModel = new CollectionOverviewModel(this);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(AppLauncher.class.getResource("/com/dartin/project/gui/resources/view/collectionOverview.fxml"));
@@ -79,7 +77,7 @@ public class AppLauncher extends Application{
         }
     }
 
-    public void showNewItem(TreeItem<? extends Object> selection) {
+    public void showNewItem(TreeItem<?> selection) {
         System.out.println("New Item");
         FXMLLoader loader = new FXMLLoader();
         try {
@@ -97,7 +95,7 @@ public class AppLauncher extends Application{
             controller.setStage(stage);
 
             stage.showAndWait();
-            if (controller.isOkClicked()){
+            if (controller.isOkClicked()) {
                 this.controller.addTreeItem(convertTreeItem(model.getItem()));
             }
         } catch (IOException | TreeDuplicateException e) {
@@ -106,11 +104,11 @@ public class AppLauncher extends Application{
 
     }
 
-    public void showNewItem(){
+    public void showNewItem() {
         showNewItem(null);
     }
 
-    public Map<String, Object> convertItem(Item item){
+    public Map<String, Object> convertItem(Item item) {
         Map<String, Object> map = new HashMap<>();
 
         map.put("name", item.name());
@@ -120,7 +118,7 @@ public class AppLauncher extends Application{
         return map;
     }
 
-    public Item convertMap(Map<String, Object> map){
+    public Item convertMap(Map<String, Object> map) {
         return new Item(
                 (String) map.get("name"),
                 (String) map.get("usage"),
@@ -129,11 +127,11 @@ public class AppLauncher extends Application{
         );
     }
 
-    public Item getSelectedItem(){
+    public Item getSelectedItem() {
         return overviewModel.getSelectedItem();
     }
 
-    public TreeItem<Object> convertTreeItem(Item item){
+    public TreeItem<Object> convertTreeItem(Item item) {
         TreeItem<Object> treeItem = new TreeItem<>(item.name());
         treeItem.getChildren().add(new TreeItem<>(item.usage()));
         treeItem.getChildren().add(new TreeItem<>(item.size()));

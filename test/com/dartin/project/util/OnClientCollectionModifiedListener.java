@@ -4,5 +4,5 @@ import java.util.Collection;
 
 @FunctionalInterface
 public interface OnClientCollectionModifiedListener {
-	void onHandle(Collection collection);
+    void onHandle(Collection collection);
 }
