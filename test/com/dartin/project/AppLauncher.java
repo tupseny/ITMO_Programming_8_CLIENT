@@ -5,6 +5,7 @@ import com.dartin.project.gui.CollectionOverviewModel;
 import com.dartin.project.gui.NewItemModel;
 import com.dartin.project.gui.controller.CollectionOverviewController;
 import com.dartin.project.gui.controller.NewItemController;
+import com.dartin.project.net.MessageReceiver;
 import com.dartin.util.Item;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +16,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class AppLauncher extends Application{
 
@@ -39,6 +42,10 @@ public class AppLauncher extends Application{
         primaryStage.setResizable(false);
         initLayout();
         loadCollectionOverview();
+
+        controller.setWaitCollection(true);
+        overviewModel.getNewRoot();
+
 	}
 
     private void loadCollectionOverview() {
@@ -132,5 +139,9 @@ public class AppLauncher extends Application{
         treeItem.getChildren().add(new TreeItem<>(item.size()));
         treeItem.getChildren().add(new TreeItem<>(item.date()));
         return treeItem;
+    }
+
+    public void setNewRoot(TreeItem<Object> items) {
+        controller.setNewRoot(items);
     }
 }

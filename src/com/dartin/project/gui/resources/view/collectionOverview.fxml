@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dartin.project.gui.controller.CollectionOverviewController">
@@ -50,6 +51,11 @@
 						<Button fx:id="buttonEdit" mnemonicParsing="false" onAction="#handleButtonEdit" text="Edit..." />
 						<Button fx:id="buttonDelete" mnemonicParsing="false" onAction="#handleButtonDelete" text="Delete" />
 					</HBox>
+               <HBox alignment="CENTER" layoutX="30.0" layoutY="98.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                  <children>
+                     <Text fx:id="statusText" onMouseClicked="#statusTextClicked" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
+                  </children>
+               </HBox>
 				</AnchorPane>
 			</SplitPane>
 			<AnchorPane>

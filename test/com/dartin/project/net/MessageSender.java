@@ -34,16 +34,15 @@ public class MessageSender implements Runnable{
 	public void run() {
 
 		try {
-			Thread.sleep(120);
 			SocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(ip), port);
 			DatagramSocket datagramSocket = new DatagramSocket();
+
 			datagramSocket.send(formDatagramPacket(message, socketAddress));
+			System.out.println("Message sent successfully "+"to ip:" + this.ip + ": " + this.port);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("sending failed");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 
 	}
