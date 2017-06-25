@@ -3,6 +3,9 @@ package com.dartin.project.gui.controller;
 import com.daniily.util.Tree;
 import com.dartin.project.exception.TreeDuplicateException;
 import com.dartin.project.gui.CollectionOverviewModel;
+import com.dartin.project.net.MessageManager;
+import com.dartin.project.net.MessageReceiver;
+import com.dartin.project.net.ServerMessage;
 import com.dartin.project.util.UniversalConverter;
 import com.dartin.util.Item;
 import com.sun.org.apache.xpath.internal.SourceTree;
@@ -11,7 +14,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,10 +47,13 @@ public class CollectionOverviewController{
 	private Button buttonEdit;
 	@FXML
 	private Button buttonDelete;
+	@FXML
+	private Text statusText;
 
 	private CollectionOverviewModel model;
 	private TreeItem<Object> selectedTreeItem;
 	private List<ObservableList<TreeItem<Object>>> stackList = new ArrayList<>();
+	private boolean waitCollection =false;
 
 	@FXML
 	private void handleToggleButtonName(ActionEvent actionEvent) {
@@ -57,7 +68,20 @@ public class CollectionOverviewController{
 	}
 
 	@FXML
-	private void handleToggleButtonSize(ActionEvent actionEvent) {
+	private void handleToggleButtonSize(ActionEvent actionEvent) {}
+
+	@FXML
+	private void statusTextClicked(){
+		System.out.println("Status Text clicked");
+		System.out.println(waitCollection);
+		if (!getWaitCollection()) {
+			model.getNewRoot();
+			setWaitCollection(true);
+			setStatus("Collection requested!\n Please wait...", "yellow");
+			return;
+		}
+		System.out.println("Request sent! Please wait...");
+		setStatus("Request sent!\n Please wait...", "red");
 	}
 
 	@FXML
@@ -87,7 +111,10 @@ public class CollectionOverviewController{
 		treeView.getRoot().setExpanded(true);
 		treeView.getSelectionModel().selectedItemProperty().addListener(
 				(observable, oldValue, newValue) -> handleSelection(newValue));
-	}
+
+        statusText.setFont(Font.font("Arial", 24));
+        setStatus("Wait for collection...", "yellow");
+    }
 
 	private void handleSelection(Object newValue) {
 		if (treeView.getRoot().getChildren().contains(newValue)){
@@ -168,14 +195,47 @@ public class CollectionOverviewController{
 		setTreeRoot(stackList.get(stackList.size()-1));
 	}
 
-	private void setTreeRoot(TreeItem<Object> treeItem){
-		treeView.setRoot(treeItem);
-		treeView.getRoot().setExpanded(true);
+	public void setTreeRoot(TreeItem<Object> treeItem){
+	    if (treeItem!=null) {
+            treeView.setRoot(treeItem);
+            treeView.getRoot().setExpanded(true);
+        }else {
+	        treeView.setRoot(new TreeItem<Object>("null"));
+        }
+
 	}
 
-	private void setTreeRoot(ObservableList<TreeItem<Object>> treeItemList){
+    public void setTreeRoot(ObservableList<TreeItem<Object>> treeItemList){
 		TreeItem<Object> root = new TreeItem<>("Item tree");
 		root.getChildren().setAll(treeItemList);
 		setTreeRoot(root);
+	}
+
+	public void setStatus(String text, String color){
+		statusText.setFill(Paint.valueOf(color));
+		statusText.setText(text);
+	}
+
+	public void setNewRoot(TreeItem<Object> treeItem){
+
+	    if (treeItem==null){
+            setStatus("Collection loading error!\n" +
+                    "RESEND REQUEST", "red");
+        }else {
+	        setTreeRoot(treeItem);
+
+            setStatus("Collection load succeeded\n" +
+                    "UPDATE COLLECTION", "green");
+        }
+        waitCollection = false;
+		System.out.println(waitCollection);
+	}
+
+    public void setWaitCollection(boolean value){
+		this.waitCollection = value;
+	}
+
+	public boolean getWaitCollection(){
+    	return this.waitCollection;
 	}
 }
