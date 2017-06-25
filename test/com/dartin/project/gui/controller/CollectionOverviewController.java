@@ -3,13 +3,8 @@ package com.dartin.project.gui.controller;
 import com.daniily.util.Tree;
 import com.dartin.project.exception.TreeDuplicateException;
 import com.dartin.project.gui.CollectionOverviewModel;
-import com.dartin.project.net.MessageManager;
-import com.dartin.project.net.MessageReceiver;
-import com.dartin.project.net.ServerMessage;
 import com.dartin.project.util.UniversalConverter;
 import com.dartin.util.Item;
-import com.sun.org.apache.xpath.internal.SourceTree;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,225 +12,225 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import java.io.IOException;
-import java.net.SocketException;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class CollectionOverviewController{
+public class CollectionOverviewController {
 
-	@FXML
-	private TreeView treeView;
-	@FXML
-	private ToggleButton toggleButtonName;
-	@FXML
-	private ToggleButton toggleButtonSize;
-	@FXML
-	private ToggleButton toggleButtonUsage;
-	@FXML
-	private TextField textFieldName;
-	@FXML
-	private TextField textFieldUsage;
-	@FXML
-	private TextField textFieldSize;
-	@FXML
-	private Button buttonNew;
-	@FXML
-	private Button buttonEdit;
-	@FXML
-	private Button buttonDelete;
-	@FXML
-	private Text statusText;
+    @FXML
+    private TreeView treeView;
+    @FXML
+    private ToggleButton toggleButtonName;
+    @FXML
+    private ToggleButton toggleButtonSize;
+    @FXML
+    private ToggleButton toggleButtonUsage;
+    @FXML
+    private TextField textFieldName;
+    @FXML
+    private TextField textFieldUsage;
+    @FXML
+    private TextField textFieldSize;
+    @FXML
+    private Button buttonNew;
+    @FXML
+    private Button buttonEdit;
+    @FXML
+    private Button buttonDelete;
+    @FXML
+    private Text statusText;
 
-	private CollectionOverviewModel model;
-	private TreeItem<Object> selectedTreeItem;
-	private List<ObservableList<TreeItem<Object>>> stackList = new ArrayList<>();
-	private boolean waitCollection =false;
+    private CollectionOverviewModel model;
+    private TreeItem<Object> selectedTreeItem;
+    private List<ObservableList<TreeItem<Object>>> stackList = new ArrayList<>();
+    private boolean waitCollection = false;
 
-	@FXML
-	private void handleToggleButtonName(ActionEvent actionEvent) {
-		if (toggleButtonName.isSelected())
-		filterItems("name", textFieldName.getText());
-		else unfilterItems();
-	}
+    @FXML
+    private void handleToggleButtonName() {
+        if (toggleButtonName.isSelected())
+            filterItems("name", textFieldName.getText());
+        else unfilterItems();
+    }
 
-	@FXML
-	private void handleToggleButtonUsage(ActionEvent actionEvent) {
-		//TODO: complete filters
-	}
+    @FXML
+    private void handleToggleButtonUsage() {
+        //TODO: complete filters
+    }
 
-	@FXML
-	private void handleToggleButtonSize(ActionEvent actionEvent) {}
+    @FXML
+    private void handleToggleButtonSize() {
+    }
 
-	@FXML
-	private void statusTextClicked(){
-		System.out.println("Status Text clicked");
-		System.out.println(waitCollection);
-		if (!getWaitCollection()) {
-			model.getNewRoot();
-			setWaitCollection(true);
-			setStatus("Collection requested!\n Please wait...", "yellow");
-			return;
-		}
-		System.out.println("Request sent! Please wait...");
-		setStatus("Request sent!\n Please wait...", "red");
-	}
+    @FXML
+    private void statusTextClicked() {
+        System.out.println("Status Text clicked");
+        System.out.println(waitCollection);
+        if (!getWaitCollection()) {
+            model.getNewRoot();
+            setWaitCollection(true);
+            setStatus("Collection requested!\n Please wait...", "yellow");
+            return;
+        }
+        System.out.println("Request sent! Please wait...");
+        setStatus("Request sent!\n Please wait...", "red");
+    }
 
-	@FXML
-	private void handleButtonNew(ActionEvent actionEvent) {
-		model.showNewItem();
-	}
+    @FXML
+    private void handleButtonNew() {
+        model.showNewItem();
+    }
 
-	@FXML
-	private void handleButtonEdit(ActionEvent actionEvent) {
-		model.showNewItem(selectedTreeItem);
-	}
+    @FXML
+    private void handleButtonEdit() {
+        model.showNewItem(selectedTreeItem);
+    }
 
-	@FXML
-	private void handleButtonDelete(ActionEvent actionEvent) {
-		deleteItem(selectedTreeItem);
-	}
+    @FXML
+    private void handleButtonDelete() {
+        deleteItem(selectedTreeItem);
+    }
 
-	@FXML
-	private void handleStartStoryButton(ActionEvent actionEvent) {}
+    @FXML
+    private void handleStartStoryButton() {
+    }
 
-	@FXML
-	private void initialize(){
-		treeView.getSelectionModel().selectedItemProperty().addListener(
-				(observable, oldValue, newValue) -> setSelectedItem((TreeItem<Object>) newValue));
-		initTree();
-		treeView.getSelectionModel().select(treeView.getRoot().getChildren().get(0));
-		treeView.getRoot().setExpanded(true);
-		treeView.getSelectionModel().selectedItemProperty().addListener(
-				(observable, oldValue, newValue) -> handleSelection(newValue));
+    @FXML
+    private void initialize() {
+        treeView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> setSelectedItem((TreeItem<Object>) newValue));
+        initTree();
+        treeView.getSelectionModel().select(treeView.getRoot().getChildren().get(0));
+        treeView.getRoot().setExpanded(true);
+        treeView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> handleSelection(newValue));
 
         statusText.setFont(Font.font("Arial", 24));
         setStatus("Wait for collection...", "yellow");
     }
 
-	private void handleSelection(Object newValue) {
-		if (treeView.getRoot().getChildren().contains(newValue)){
-			setDisableButtons(false, false, false);
-		}else{
-			setDisableButtons(false, true, true);
-		}
-	}
+    private void handleSelection(Object newValue) {
+        if (treeView.getRoot().getChildren().contains(newValue)) {
+            setDisableButtons(false, false, false);
+        } else {
+            setDisableButtons(false, true, true);
+        }
+    }
 
-	private void setSelectedItem(TreeItem<Object> selection){
-		selectedTreeItem = selection;
-	}
+    private void setSelectedItem(TreeItem<Object> selection) {
+        selectedTreeItem = selection;
+    }
 
-	public TreeItem<Object> getSelectedTreeItem(){
-		return selectedTreeItem;
-	}
+    public TreeItem<Object> getSelectedTreeItem() {
+        return selectedTreeItem;
+    }
 
-	public void setTreeView(Tree<? extends Object> tree) {
-		treeView.setRoot(UniversalConverter.treeToTreeView(tree).getRoot());
-		treeView.refresh();
-	}
+    public void setTreeView(Tree<?> tree) {
+        treeView.setRoot(UniversalConverter.treeToTreeView(tree).getRoot());
+        treeView.refresh();
+    }
 
-	public void setModel(CollectionOverviewModel model){
-		this.model = model;
-	}
+    public void setModel(CollectionOverviewModel model) {
+        this.model = model;
+    }
 
-	public void initTree(){
-		Set<Item> items = new HashSet<>();
-		items.add(new Item("name1", "usage1", Item.Size.HUGE, LocalDate.now()));
-		items.add(new Item("name2", "usage2", Item.Size.TINY, LocalDate.now()));
+    public void initTree() {
+        Set<Item> items = new HashSet<>();
+        items.add(new Item("name1", "usage1", Item.Size.HUGE, LocalDate.now()));
+        items.add(new Item("name2", "usage2", Item.Size.TINY, LocalDate.now()));
 
 
-		Tree<String> tree = UniversalConverter.itemSetToTree(items);
-		setTreeView(tree);
-	}
+        Tree<String> tree = UniversalConverter.itemSetToTree(items);
+        setTreeView(tree);
+    }
 
-	public void addTreeItem(TreeItem<Object> treeItem) throws TreeDuplicateException {
-		System.out.println(treeItem);
-		System.out.println(treeView.getRoot().getChildren().toString());
-		if (!treeView.getRoot().getChildren().contains((Object) treeItem)){
-			treeView.getRoot().getChildren().add(treeItem);
-			System.out.println("not consists");
-		}else{
-			System.out.println("consists");
-			throw new TreeDuplicateException("Tree consists " + treeItem.toString());
-		}
-	}
+    public void addTreeItem(TreeItem<Object> treeItem) throws TreeDuplicateException {
+        System.out.println(treeItem);
+        System.out.println(treeView.getRoot().getChildren().toString());
+        if (!treeView.getRoot().getChildren().contains((Object) treeItem)) {
+            treeView.getRoot().getChildren().add(treeItem);
+            System.out.println("not consists");
+        } else {
+            System.out.println("consists");
+            throw new TreeDuplicateException("Tree consists " + treeItem.toString());
+        }
+    }
 
-	public void setDisableButtons(boolean disableNew, boolean disableEdit, boolean disableDelete){
-		buttonDelete.setDisable(disableDelete);
-		buttonEdit.setDisable(disableEdit);
-		buttonNew.setDisable(disableNew);
-	}
+    public void setDisableButtons(boolean disableNew, boolean disableEdit, boolean disableDelete) {
+        buttonDelete.setDisable(disableDelete);
+        buttonEdit.setDisable(disableEdit);
+        buttonNew.setDisable(disableNew);
+    }
 
-	public void setDisableButtons(boolean disable){
-		setDisableButtons(disable, disable, disable);
-	}
+    public void setDisableButtons(boolean disable) {
+        setDisableButtons(disable, disable, disable);
+    }
 
-	private void deleteItem(TreeItem<Object> item){
-		int selIndex = treeView.getRoot().getChildren().indexOf(
-				treeView.getSelectionModel().getSelectedItem());
-		treeView.getRoot().getChildren().remove(item);
-		if (treeView.getRoot().getChildren().isEmpty()){
-			setDisableButtons(false, true, true);
-		}else{
-			treeView.getSelectionModel().select(selIndex+1);
-		}
-
-	}
-
-	private void filterItems(String filter, String value){
-		stackList.add(treeView.getRoot().getChildren());
-
-		setTreeRoot(model.filterList((ObservableList) stackList.get(stackList.size() - 1), filter, value));
-	}
-
-	private void unfilterItems(){
-		setTreeRoot(stackList.get(stackList.size()-1));
-	}
-
-	public void setTreeRoot(TreeItem<Object> treeItem){
-	    if (treeItem!=null) {
-            treeView.setRoot(treeItem);
-            treeView.getRoot().setExpanded(true);
-        }else {
-	        treeView.setRoot(new TreeItem<Object>("null"));
+    private void deleteItem(TreeItem<Object> item) {
+        int selIndex = treeView.getRoot().getChildren().indexOf(
+                treeView.getSelectionModel().getSelectedItem());
+        treeView.getRoot().getChildren().remove(item);
+        if (treeView.getRoot().getChildren().isEmpty()) {
+            setDisableButtons(false, true, true);
+        } else {
+            treeView.getSelectionModel().select(selIndex + 1);
         }
 
-	}
+    }
 
-    public void setTreeRoot(ObservableList<TreeItem<Object>> treeItemList){
-		TreeItem<Object> root = new TreeItem<>("Item tree");
-		root.getChildren().setAll(treeItemList);
-		setTreeRoot(root);
-	}
+    private void filterItems(String filter, String value) {
+        stackList.add(treeView.getRoot().getChildren());
 
-	public void setStatus(String text, String color){
-		statusText.setFill(Paint.valueOf(color));
-		statusText.setText(text);
-	}
+        setTreeRoot(model.filterList((ObservableList) stackList.get(stackList.size() - 1), filter, value));
+    }
 
-	public void setNewRoot(TreeItem<Object> treeItem){
+    private void unfilterItems() {
+        setTreeRoot(stackList.get(stackList.size() - 1));
+    }
 
-	    if (treeItem==null){
+    public void setTreeRoot(TreeItem<Object> treeItem) {
+        if (treeItem != null) {
+            treeView.setRoot(treeItem);
+            treeView.getRoot().setExpanded(true);
+        } else {
+            treeView.setRoot(new TreeItem<Object>("null"));
+        }
+
+    }
+
+    public void setTreeRoot(ObservableList<TreeItem<Object>> treeItemList) {
+        TreeItem<Object> root = new TreeItem<>("Item tree");
+        root.getChildren().setAll(treeItemList);
+        setTreeRoot(root);
+    }
+
+    public void setStatus(String text, String color) {
+        statusText.setFill(Paint.valueOf(color));
+        statusText.setText(text);
+    }
+
+    public void setNewRoot(TreeItem<Object> treeItem) {
+
+        if (treeItem == null) {
             setStatus("Collection loading error!\n" +
                     "RESEND REQUEST", "red");
-        }else {
-	        setTreeRoot(treeItem);
+        } else {
+            setTreeRoot(treeItem);
 
             setStatus("Collection load succeeded\n" +
                     "UPDATE COLLECTION", "green");
         }
         waitCollection = false;
-		System.out.println(waitCollection);
-	}
+        System.out.println(waitCollection);
+    }
 
-    public void setWaitCollection(boolean value){
-		this.waitCollection = value;
-	}
+    public void setWaitCollection(boolean value) {
+        this.waitCollection = value;
+    }
 
-	public boolean getWaitCollection(){
-    	return this.waitCollection;
-	}
+    public boolean getWaitCollection() {
+        return this.waitCollection;
+    }
 }

@@ -1,42 +1,38 @@
 package com.dartin.project.gui;
 
-import com.daniily.util.Tree;
 import com.dartin.project.AppLauncher;
-import com.dartin.project.exception.NotValidMessageException;
 import com.dartin.project.net.CollectionWaiter;
-import com.dartin.project.net.MessageManager;
-import com.dartin.project.net.MessageReceiver;
-import com.dartin.project.net.ServerMessage;
-import com.dartin.project.util.UniversalConverter;
+import com.dartin.project.net.RequestManager;
 import com.dartin.util.Item;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Created by Martin on 21.06.2017.
  */
-public class CollectionOverviewModel{
+public class CollectionOverviewModel {
     private AppLauncher app;
     private Item selectedItem;
+    private String ip;
+    private final int port = 5555;
 
-    public CollectionOverviewModel(AppLauncher app){
+    public CollectionOverviewModel(AppLauncher app, String ip) {
         this.app = app;
+        this.ip = ip;
     }
 
-    public void showNewItem(TreeItem<? extends Object> selection) {
+    public void showNewItem(TreeItem<?> selection) {
         app.showNewItem(selection);
     }
 
-    public void showNewItem(){
+    public void showNewItem() {
         app.showNewItem();
     }
 
@@ -47,11 +43,11 @@ public class CollectionOverviewModel{
                 LocalDate.now());
     }
 
-    public Item getSelectedItem(){
+    public Item getSelectedItem() {
         return selectedItem;
     }
 
-    public Item convertTreeItem(TreeItem<? extends Object> item){
+    public Item convertTreeItem(TreeItem<?> item) {
         if (item != null) {
             return new Item(
                     (String) item.getValue(),
@@ -64,12 +60,12 @@ public class CollectionOverviewModel{
         return new Item();
     }
 
-    public ObservableList<TreeItem<Object>> filterList(ObservableList<TreeItem<Object>> list, String filter, String value){
+    public ObservableList<TreeItem<Object>> filterList(ObservableList<TreeItem<Object>> list, String filter, String value) {
         Stream<TreeItem<Object>> stream = Stream.empty();
 
         System.out.println(list.toString());
 
-        switch (filter){
+        switch (filter) {
             case "name":
                 stream = list.stream()
                         .filter(objectTreeItem -> objectTreeItem.getValue().equals(value));
@@ -87,17 +83,20 @@ public class CollectionOverviewModel{
                         .filter(objectTreeItem -> objectTreeItem.getChildren().get(2).getValue().equals(value));
         }
 
-        ObservableList<TreeItem<Object>> temp = stream.collect(Collectors.toCollection(FXCollections::observableArrayList));
-        return temp;
+        return stream.collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
-    public void getNewRoot(){
-        new Thread(new CollectionWaiter(this)).start();
+    public void getNewRoot() {
+        if (RequestManager.checkConnection(ip)){
+            app.setNewRoot(convertSetToRoot((Set<Item>) RequestManager.requestCollection(ip)));
+            //TODO: Stopped here!
+
+        }
     }
 
-    private TreeItem<Object> convertSetToRoot(Set<Item> items){
+    private TreeItem<Object> convertSetToRoot(Set<Item> items) {
         TreeItem<Object> root = new TreeItem<>("Item's tree");
-        if (items!=null) {
+        if (items != null) {
             items.forEach(item -> {
                 TreeItem<Object> treeItem = new TreeItem<>(item.name());
                 treeItem.getChildren().add(new TreeItem<>(item.usage()));
@@ -109,7 +108,9 @@ public class CollectionOverviewModel{
         return root;
     }
 
-    public void setNewCollection(Set<Item> items) {
-        app.setNewRoot(convertSetToRoot(items));
+    public void setNewCollection(Map<String, Object> items) {
+
+        System.out.println(items);
+//        app.setNewRoot(convertSetToRoot(items));
     }
 }

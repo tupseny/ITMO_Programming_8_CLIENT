@@ -1,31 +1,25 @@
 package com.dartin.project;
 
-import com.daniily.util.Tree;
+import com.dartin.net.ServerMessage;
+import com.dartin.project.net.MessageReceiver;
 import com.dartin.project.net.MessageSender;
-import com.dartin.project.net.ServerMessage;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import com.dartin.project.util.UniversalConverter;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 
 public class TestApp {
-	public static void main(String[] args) {
-		ArrayList<Integer> list = new ArrayList<>();
-		for (int i =0; i<10; i++){
-			list.add(i);
-		}
-		System.out.println(list);
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);
+        MessageSender sender = new MessageSender(message, "5.18.235.210", 5555);
+        sender.run();
 
-		Stream<Integer> newList = list.stream().filter(integer -> integer > 5);
-		newList.forEach(integer -> System.out.println(integer));
-	}
+        MessageReceiver receiver = new MessageReceiver();
+        receiver.connect(5555, 60000);
+        System.out.println(
+                (String) ServerMessage.recover(receiver.listen().getData()).getContent(ServerMessage.CONTENT_LOG)
+        );
+    }
 }

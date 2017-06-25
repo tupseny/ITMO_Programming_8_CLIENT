@@ -3,9 +3,6 @@ package com.dartin.project;
 import com.dartin.project.net.MessageReceiver;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
 
 /**
  * Created by Martin on 22.06.2017.
