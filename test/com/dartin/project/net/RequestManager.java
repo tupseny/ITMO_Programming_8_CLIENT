@@ -12,9 +12,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RequestManager{
 
-    public static Object requestCollection(String ip, int port, int timeout) {
+    public static Object requestCollection(String ip, int port, int timeout) throws IOException {
         MessageSender sender = new MessageSender(
-                new ServerMessage(ServerMessage.CMD_RUN), ip, port);
+                new ServerMessage(ServerMessage.CMD_RUN).toBytes(), ip, port);
 
         new Thread(sender).run();
         try {
@@ -25,15 +25,15 @@ public class RequestManager{
         }
     }
 
-    public static Object requestCollection(String ip){
-        requestCollection(ip, 5555, 60000);
+    public static Object requestCollection(String ip) throws IOException {
+        return requestCollection(ip, 5555, 60000);
     }
 
-    public static boolean checkConnection(String ip, int port, int timeout){
+    public static boolean checkConnection(String ip, int port, int timeout) throws IOException {
         ServerMessage checkMessage = new ServerMessage(ServerMessage.CMD_VERIFY);
         checkMessage.addContent(ServerMessage.CONTENT_VER, new AtomicInteger(Item.VERSION));
 
-       new Thread(new MessageSender(checkMessage, ip, port)).run();
+       new Thread(new MessageSender(checkMessage.toBytes(), ip, port)).run();
 
         try {
             if ((boolean) listen(5554, timeout, ServerMessage.CONTENT_LOG)){
@@ -50,7 +50,12 @@ public class RequestManager{
     }
 
     public static boolean checkConnection(String ip){
-        checkConnection(ip, 5555, 60000);
+        try {
+            return checkConnection(ip, 5555, 60000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private static Object listen(int port, int timeout, String key) throws IOException {

@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
@@ -88,7 +89,11 @@ public class CollectionOverviewModel {
 
     public void getNewRoot() {
         if (RequestManager.checkConnection(ip)){
-            app.setNewRoot(convertSetToRoot((Set<Item>) RequestManager.requestCollection(ip)));
+            try {
+                app.setNewRoot(convertSetToRoot((Set<Item>) RequestManager.requestCollection(ip)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //TODO: Stopped here!
 
         }

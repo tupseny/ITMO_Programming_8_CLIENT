@@ -2,6 +2,7 @@ package com.dartin.project.net;
 
 import com.dartin.net.ServerMessage;
 
+import javax.xml.crypto.Data;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -14,32 +15,20 @@ import java.util.Arrays;
 public class MessageSender implements Runnable {
     private int port;
     private String ip;
-    private ServerMessage message;
+    private byte[] message;
 
-    public MessageSender(ServerMessage message, String ip, int port) {
+    public MessageSender(byte[] message, String ip, int port) {
         this.message = message;
         this.ip = ip;
         this.port = port;
     }
 
-    public static DatagramPacket formDatagramPacket(ServerMessage message, SocketAddress address)
-            throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
-        byte[] serializedMessage = bos.toByteArray();
-        System.out.println("length " + serializedMessage.length + ": " + Arrays.toString(serializedMessage));
-        return new DatagramPacket(serializedMessage, serializedMessage.length, address);
-    }
-
     @Override
     public void run() {
-
         try {
-            SocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(ip), port);
-            DatagramSocket datagramSocket = new DatagramSocket();
-
-            datagramSocket.send(formDatagramPacket(message, socketAddress));
+            DatagramPacket packet = new DatagramPacket(message, message.length, InetAddress.getByName(ip), port);
+            DatagramSocket socket = new DatagramSocket();
+            socket.send(packet);
             System.out.println("Message sent successfully " + "to ip:" + this.ip + ": " + this.port);
 
         } catch (IOException e) {
