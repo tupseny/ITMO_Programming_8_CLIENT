@@ -28,7 +28,7 @@ public class AppLauncher extends Application {
     private CollectionOverviewModel overviewModel;
 
     private final String WINDOW_TITLE = "ITMO BEST LAB EVER BY 666DEN4UK666 AND XXXAWESOMEMARTINXXX Client"; //lol
-    private static final String ip = "192.168.1.22";
+    private static final String ip = "192.168.1.45";
 
     public static String getIp(){
         return ip;
@@ -100,9 +100,15 @@ public class AppLauncher extends Application {
             controller.setStage(stage);
 
             stage.showAndWait();
-            if (controller.isOkClicked()) {
+            if (controller.isOkClicked() || selection==null) {
                 Item item = model.getItem();
                 this.controller.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
+            }
+            if (controller.isOkClicked() || selection != null){
+                Item item = model.getItem();
+                this.controller.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(overviewModel.convertTreeItem(selection), ip, false)));
+                this.controller.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
+
 
             }
         } catch (IOException e) {
