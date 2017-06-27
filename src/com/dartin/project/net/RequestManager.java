@@ -19,8 +19,7 @@ public class RequestManager{
         ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);
         try {
             new Thread(new MessageSender(message.toBytes(), ip, port)).run();
-            System.out.println("got "+listen(5554, timeout, ServerMessage.CONTENT_SET));
-            return " ";
+            return (String) listen(5554, timeout, ServerMessage.CONTENT_LOG);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,6 +79,7 @@ public class RequestManager{
     }
 
     public static boolean checkConnection(String ip, int port, int timeout) throws IOException {
+        System.out.println("\nChecking connection...");
         ServerMessage checkMessage = new ServerMessage(ServerMessage.CMD_VERIFY);
         checkMessage.addContent(ServerMessage.CONTENT_VER, new AtomicInteger(Item.VERSION));
 
@@ -113,7 +113,9 @@ public class RequestManager{
         MessageReceiver receiver = new MessageReceiver();
         try {
             receiver.connect(port, timeout);
-            return ServerMessage.recover(receiver.listen().getData())
+            byte[] data = receiver.listen().getData();
+            System.out.println("Packet's size is " + data.length);
+            return ServerMessage.recover(data)
                         .getContent(key);
         } catch (SocketException | ClassNotFoundException e) {
             e.printStackTrace();

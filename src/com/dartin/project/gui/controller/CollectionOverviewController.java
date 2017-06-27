@@ -69,12 +69,13 @@ public class CollectionOverviewController {
     @FXML
     private void statusTextClicked() {
         System.out.println("\n------------------------\nStatus Text clicked");
-
-        System.out.println("Wait collection before is " + waitCollection);
         if (!waitCollection) {
+            System.out.println("Collection requested!");
+            setStatus("Collection requested!\n Please wait...", "yellow");
             model.getNewRoot();
             setWaitCollection(false);
-            setStatus("Collection requested!\n Please wait...", "yellow");
+
+
             return;
         }
         System.out.println("Wait collection after is " + waitCollection);
@@ -229,8 +230,6 @@ public class CollectionOverviewController {
                     "UPDATE COLLECTION", "green");
             setTreeRoot(treeItem);
         }
-
-        System.out.println("Set waitCollection to false");
         setWaitCollection(false);
     }
 
