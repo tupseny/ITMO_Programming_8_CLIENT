@@ -89,8 +89,11 @@ public class CollectionOverviewModel {
     public void getNewRoot() {
         if (RequestManager.checkConnection(ip)) {
             try {
-                app.setNewRoot(convertSetToRoot((Set<Item>) RequestManager.requestCollection(ip)));
-            } catch (IOException e) {
+                Set<Item> items = (Set<Item>) RequestManager.requestCollection(ip);
+                System.out.println("Got set: " + items.toString());
+                app.setNewRoot(convertSetToRoot(items));
+                return;
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             //TODO: Stopped here!
@@ -110,6 +113,8 @@ public class CollectionOverviewModel {
                 root.getChildren().add(treeItem);
             });
         }
+        System.out.println("Set converted to root: " + root.getChildren().toString()
+        );
         return root;
     }
 

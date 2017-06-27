@@ -28,7 +28,11 @@ public class RequestManager{
             message.lock();
             MessageSender sender = new MessageSender(message.toBytes(), ip, port);
             new Thread(sender).run();
-            return (Set<Item>) listen(5554, timeout, ServerMessage.CONTENT_SET);
+            Set<Item> items = (Set<Item>) listen(5554, timeout, ServerMessage.CONTENT_SET);
+            if (items==null){
+                System.out.println("Server returned null!");
+            }
+            return items;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,6 +54,7 @@ public class RequestManager{
         try {
             return listen(5554, timeout, ServerMessage.CONTENT_SET);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("Server is not responsing");
             return null;
         }
@@ -67,7 +72,7 @@ public class RequestManager{
 
         try {
             if (((AtomicBoolean) listen(5554, timeout, ServerMessage.CONTENT_VER)).get()){
-                System.out.println("Server established\n");
+                System.out.println("SERVER IS ESTABLISHED\n");
                 return true;
             }
         } catch (SocketTimeoutException e){

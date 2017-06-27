@@ -68,15 +68,16 @@ public class CollectionOverviewController {
 
     @FXML
     private void statusTextClicked() {
-        System.out.println("Status Text clicked");
+        System.out.println("\n------------------------\nStatus Text clicked");
         System.out.println(waitCollection);
+        setWaitCollection(false);
         if (!getWaitCollection()) {
             model.getNewRoot();
             setWaitCollection(true);
             setStatus("Collection requested!\n Please wait...", "yellow");
             return;
         }
-        System.out.println("Request sent! Please wait...");
+        System.out.println("!!!Request sent! Please wait...");
         setStatus("Request sent!\n Please wait...", "red");
     }
 
@@ -194,6 +195,7 @@ public class CollectionOverviewController {
     }
 
     public void setTreeRoot(TreeItem<Object> treeItem) {
+        System.out.println("Setting new Root: " + treeItem.getChildren().toString());
         if (treeItem != null) {
             treeView.setRoot(treeItem);
             treeView.getRoot().setExpanded(true);
@@ -220,14 +222,14 @@ public class CollectionOverviewController {
             setStatus("Collection loading error!\n" +
                     "RESEND REQUEST", "red");
         } else {
-
-
+            System.out.println("Change status to succeded");
             setStatus("Collection load succeeded\n" +
                     "UPDATE COLLECTION", "green");
+            setTreeRoot(treeItem);
         }
-        setTreeRoot(treeItem);
+
+        System.out.println("Set waitCollection to false");
         waitCollection = false;
-        System.out.println(waitCollection);
     }
 
     public void setWaitCollection(boolean value) {
