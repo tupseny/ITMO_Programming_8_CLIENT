@@ -123,4 +123,10 @@ public class CollectionOverviewModel {
         System.out.println(items);
 //        app.setNewRoot(convertSetToRoot(items));
     }
+
+    public void startStory() {
+        if(RequestManager.checkConnection(ip)){
+            System.out.println(RequestManager.requestStory(ip));
+        }
+    }
 }

@@ -28,12 +28,6 @@ public class MessageReceiver{
 
         System.out.println("Listening...");
         socket.receive(receivedPacket);
-        try {
-            System.out.println("Got message:\nCMD: " + ServerMessage.recover(receivedPacket.getData()).getCmd() +
-                    "\nContent: " + ServerMessage.recover(receivedPacket.getData()).toString());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         socket.close();
         return receivedPacket;
     }

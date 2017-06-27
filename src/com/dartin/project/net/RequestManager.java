@@ -15,6 +15,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RequestManager{
     private static final int DEFAULT_TIMEOUT = 10000;
 
+    public static String requestStory(String ip, int port, int timeout){
+        ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);
+        try {
+            new Thread(new MessageSender(message.toBytes(), ip, port)).run();
+            System.out.println("got "+listen(5554, timeout, ServerMessage.CONTENT_SET));
+            return " ";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String requestStory(String ip){
+        return requestStory(ip, 5555, DEFAULT_TIMEOUT);
+    }
 
     public static Set<Item> sendRequest(Item item, String ip, int port, int timeout, boolean signal){
         ServerMessage message;
