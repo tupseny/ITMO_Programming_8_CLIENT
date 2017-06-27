@@ -99,7 +99,7 @@ public class CollectionOverviewModel {
         }
     }
 
-    private TreeItem<Object> convertSetToRoot(Set<Item> items) {
+    public static TreeItem<Object> convertSetToRoot(Set<Item> items) {
         TreeItem<Object> root = new TreeItem<>("Item's tree");
         if (items != null) {
             items.forEach(item -> {

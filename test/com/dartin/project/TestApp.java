@@ -14,13 +14,13 @@ public class TestApp {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);
         message.lock();
-        MessageSender sender = new MessageSender(message.toBytes(), "192.168.1.45", 5555);
+        MessageSender sender = new MessageSender(message.toBytes(), "192.168.1.22", 5555);
         sender.run();
 
         MessageReceiver receiver = new MessageReceiver();
-        receiver.connect(5555, 60000);
-//        System.out.println(
-//                (String) ServerMessage.recover(receiver.listen().getData()).getContent(ServerMessage.CONTENT_LOG)
-//        );
+        receiver.connect(5554, 60000);
+        System.out.println(
+                (String) ServerMessage.recover(receiver.listen().getData()).getContent(ServerMessage.CONTENT_LOG)
+        );
     }
 }

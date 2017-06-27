@@ -1,10 +1,10 @@
 package com.dartin.project;
 
-import com.dartin.project.exception.TreeDuplicateException;
 import com.dartin.project.gui.CollectionOverviewModel;
 import com.dartin.project.gui.NewItemModel;
 import com.dartin.project.gui.controller.CollectionOverviewController;
 import com.dartin.project.gui.controller.NewItemController;
+import com.dartin.project.net.RequestManager;
 import com.dartin.util.Item;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +28,11 @@ public class AppLauncher extends Application {
     private CollectionOverviewModel overviewModel;
 
     private final String WINDOW_TITLE = "ITMO BEST LAB EVER BY 666DEN4UK666 AND XXXAWESOMEMARTINXXX Client"; //lol
+    private static final String ip = "192.168.1.22";
+
+    public static String getIp(){
+        return ip;
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -48,7 +53,7 @@ public class AppLauncher extends Application {
 
     private void loadCollectionOverview() {
         try {
-            overviewModel = new CollectionOverviewModel(this);
+            overviewModel = new CollectionOverviewModel(this, ip);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(AppLauncher.class.getResource("/com/dartin/project/gui/resources/view/collectionOverview.fxml"));
             AnchorPane collectionOverview = loader.load();
@@ -96,9 +101,11 @@ public class AppLauncher extends Application {
 
             stage.showAndWait();
             if (controller.isOkClicked()) {
-                this.controller.addTreeItem(convertTreeItem(model.getItem()));
+                Item item = model.getItem();
+                this.controller.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
+
             }
-        } catch (IOException | TreeDuplicateException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
