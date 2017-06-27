@@ -34,7 +34,7 @@
 							<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 						</rowConstraints>
 						<ToggleButton fx:id="toggleButtonName" onAction="#handleToggleButtonName" styleClass="ToggleButton" text="Name" />
-						<ToggleButton fx:id="toggleButtonUsage"  styleClass="ToggleButton" text="Usage" GridPane.rowIndex="1" />
+						<ToggleButton fx:id="toggleButtonUsage" styleClass="ToggleButton" text="Usage" GridPane.rowIndex="1" />
 						<ToggleButton fx:id="toggleButtonSize" styleClass="ToggleButton" text="Size" GridPane.rowIndex="2" />
 						<TextField fx:id="textFieldName" promptText="enter name..." GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
 						<TextField fx:id="textFieldUsage" prefHeight="30.0" prefWidth="106.0" promptText="enter usage" text="dsafsgd" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -59,7 +59,7 @@
 				</AnchorPane>
 			</SplitPane>
 			<AnchorPane>
-				<Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="82.0" prefWidth="137.0" text="START" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
+				<Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleStartStoryButton" prefHeight="82.0" prefWidth="137.0" text="START" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
 			</AnchorPane>
 		</SplitPane>
 	</AnchorPane>
