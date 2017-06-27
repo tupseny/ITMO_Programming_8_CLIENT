@@ -22,7 +22,6 @@ public class CollectionOverviewModel {
     private AppLauncher app;
     private Item selectedItem;
     private String ip;
-    private final int port = 5555;
 
     public CollectionOverviewModel(AppLauncher app, String ip) {
         this.app = app;
@@ -88,7 +87,7 @@ public class CollectionOverviewModel {
     }
 
     public void getNewRoot() {
-        if (RequestManager.checkConnection(ip)){
+        if (RequestManager.checkConnection(ip)) {
             try {
                 app.setNewRoot(convertSetToRoot((Set<Item>) RequestManager.requestCollection(ip)));
             } catch (IOException e) {
@@ -97,6 +96,7 @@ public class CollectionOverviewModel {
             //TODO: Stopped here!
 
         }
+        app.setNewRoot(null);
     }
 
     public static TreeItem<Object> convertSetToRoot(Set<Item> items) {

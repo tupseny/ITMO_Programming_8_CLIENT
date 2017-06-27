@@ -13,6 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Martin on 25.06.2017.
  */
 public class RequestManager{
+    private static final int DEFAULT_TIMEOUT = 10000;
+
 
     public static Set<Item> sendRequest(Item item, String ip, int port, int timeout, boolean signal){
         ServerMessage message;
@@ -34,12 +36,12 @@ public class RequestManager{
     }
 
     public static Set<Item> sendRequest(Item item, String ip, boolean signal){
-        return sendRequest(item, ip, 5555, 6000, signal);
+        return sendRequest(item, ip, 5555, DEFAULT_TIMEOUT, signal);
     }
 
     public static Object requestCollection(String ip, int port, int timeout) throws IOException {
         System.out.println("Request collection from server");
-        ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);
+        ServerMessage message = new ServerMessage(ServerMessage.CMD_RESTORE);
         message.addContent(ServerMessage.CONTENT_SET, "");
         message.lock();
         MessageSender sender = new MessageSender(message.toBytes(), ip, port);
@@ -54,7 +56,7 @@ public class RequestManager{
     }
 
     public static Object requestCollection(String ip) throws IOException {
-        return requestCollection(ip, 5555, 60000);
+        return requestCollection(ip, 5555, DEFAULT_TIMEOUT);
     }
 
     public static boolean checkConnection(String ip, int port, int timeout) throws IOException {
@@ -80,7 +82,7 @@ public class RequestManager{
 
     public static boolean checkConnection(String ip){
         try {
-            return checkConnection(ip, 5555, 60000);
+            return checkConnection(ip, 5555, DEFAULT_TIMEOUT);
         } catch (IOException e) {
             e.printStackTrace();
         }
