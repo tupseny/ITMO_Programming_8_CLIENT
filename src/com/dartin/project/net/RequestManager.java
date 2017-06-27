@@ -57,12 +57,17 @@ public class RequestManager{
         return sendRequest(item, ip, 5555, DEFAULT_TIMEOUT, signal);
     }
 
-    public static Object requestCollection(String ip, int port, int timeout) throws IOException {
+    public static Object requestCollection(String ip, int port, int timeout) throws SocketTimeoutException {
         System.out.println("Request collection from server");
         ServerMessage message = new ServerMessage(ServerMessage.CMD_RESTORE);
         message.addContent(ServerMessage.CONTENT_SET, "");
         message.lock();
-        MessageSender sender = new MessageSender(message.toBytes(), ip, port);
+        MessageSender sender = null;
+        try {
+            sender = new MessageSender(message.toBytes(), ip, port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         new Thread(sender).run();
         try {
@@ -74,7 +79,7 @@ public class RequestManager{
         }
     }
 
-    public static Object requestCollection(String ip) throws IOException {
+    public static Object requestCollection(String ip) throws SocketTimeoutException {
         return requestCollection(ip, 5555, DEFAULT_TIMEOUT);
     }
 

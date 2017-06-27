@@ -74,8 +74,6 @@ public class CollectionOverviewController {
             setStatus("Collection requested!\n Please wait...", "yellow");
             model.getNewRoot();
             setWaitCollection(false);
-
-
             return;
         }
         System.out.println("Wait collection after is " + waitCollection);
@@ -220,7 +218,6 @@ public class CollectionOverviewController {
     }
 
     public void setNewRoot(TreeItem<Object> treeItem) {
-        System.out.println("Tree item to set: +" + treeItem.getChildren().toString());
         if (treeItem == null) {
             setStatus("Collection loading error!\n" +
                     "RESEND REQUEST", "red");
