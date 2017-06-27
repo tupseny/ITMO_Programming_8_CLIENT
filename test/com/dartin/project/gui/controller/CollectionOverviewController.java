@@ -220,11 +220,12 @@ public class CollectionOverviewController {
             setStatus("Collection loading error!\n" +
                     "RESEND REQUEST", "red");
         } else {
-            setTreeRoot(treeItem);
+
 
             setStatus("Collection load succeeded\n" +
                     "UPDATE COLLECTION", "green");
         }
+        setTreeRoot(treeItem);
         waitCollection = false;
         System.out.println(waitCollection);
     }
