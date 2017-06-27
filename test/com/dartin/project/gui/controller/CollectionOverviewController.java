@@ -1,8 +1,10 @@
 package com.dartin.project.gui.controller;
 
 import com.daniily.util.Tree;
+import com.dartin.project.AppLauncher;
 import com.dartin.project.exception.TreeDuplicateException;
 import com.dartin.project.gui.CollectionOverviewModel;
+import com.dartin.project.net.RequestManager;
 import com.dartin.project.util.UniversalConverter;
 import com.dartin.util.Item;
 import javafx.collections.ObservableList;
@@ -151,9 +153,7 @@ public class CollectionOverviewController {
         System.out.println(treeView.getRoot().getChildren().toString());
         if (!treeView.getRoot().getChildren().contains((Object) treeItem)) {
             treeView.getRoot().getChildren().add(treeItem);
-            System.out.println("not consists");
         } else {
-            System.out.println("consists");
             throw new TreeDuplicateException("Tree consists " + treeItem.toString());
         }
     }
@@ -171,7 +171,10 @@ public class CollectionOverviewController {
     private void deleteItem(TreeItem<Object> item) {
         int selIndex = treeView.getRoot().getChildren().indexOf(
                 treeView.getSelectionModel().getSelectedItem());
-        treeView.getRoot().getChildren().remove(item);
+//        treeView.getRoot().getChildren().remove(item);
+        setTreeRoot(CollectionOverviewModel.convertSetToRoot(
+                RequestManager.sendRequest(model.convertTreeItem(item), AppLauncher.getIp(), false)
+        ));
         if (treeView.getRoot().getChildren().isEmpty()) {
             setDisableButtons(false, true, true);
         } else {

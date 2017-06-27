@@ -5,6 +5,8 @@ import com.dartin.util.Item;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -12,9 +14,35 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RequestManager{
 
+    public static Set<Item> sendRequest(Item item, String ip, int port, int timeout, boolean signal){
+        ServerMessage message;
+        try {
+            if (signal) {
+                message = new ServerMessage(ServerMessage.CMD_ADD);
+            }else{
+                message = new ServerMessage(ServerMessage.CMD_REMOVE);
+            }
+            message.addContent(ServerMessage.CONTENT_SET, item);
+            message.lock();
+            MessageSender sender = new MessageSender(message.toBytes(), ip, port);
+            new Thread(sender).run();
+            return (Set<Item>) listen(5554, timeout, ServerMessage.CONTENT_SET);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Set<Item> sendRequest(Item item, String ip, boolean signal){
+        return sendRequest(item, ip, 5555, 6000, signal);
+    }
+
     public static Object requestCollection(String ip, int port, int timeout) throws IOException {
-        MessageSender sender = new MessageSender(
-                new ServerMessage(ServerMessage.CMD_RUN).toBytes(), ip, port);
+        System.out.println("Request collection from server");
+        ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);
+        message.addContent(ServerMessage.CONTENT_SET, "");
+        message.lock();
+        MessageSender sender = new MessageSender(message.toBytes(), ip, port);
 
         new Thread(sender).run();
         try {
@@ -36,7 +64,8 @@ public class RequestManager{
        new Thread(new MessageSender(checkMessage.toBytes(), ip, port)).run();
 
         try {
-            if ((boolean) listen(5554, timeout, ServerMessage.CONTENT_LOG)){
+            if (((AtomicBoolean) listen(5554, timeout, ServerMessage.CONTENT_VER)).get()){
+                System.out.println("Server established\n");
                 return true;
             }
         } catch (SocketTimeoutException e){
