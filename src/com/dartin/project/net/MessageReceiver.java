@@ -11,7 +11,7 @@ import java.net.*;
 public class MessageReceiver{
 
     private volatile DatagramSocket socket;
-    private static int messageLength = 1024;
+    private static int messageLength = 4096;
 
     public void connect(int port, int timeout) throws SocketException {
         socket = new DatagramSocket(port);
