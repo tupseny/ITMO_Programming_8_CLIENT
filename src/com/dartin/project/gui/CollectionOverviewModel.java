@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
@@ -93,7 +94,8 @@ public class CollectionOverviewModel {
                 System.out.println("Got set: " + items.toString());
                 app.setNewRoot(convertSetToRoot(items));
                 return;
-            } catch (Exception e) {
+            } catch (SocketTimeoutException e) {
+                System.out.println("Time is out");
                 e.printStackTrace();
             }
             //TODO: Stopped here!

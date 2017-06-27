@@ -27,8 +27,12 @@ public class MessageReceiver{
         DatagramPacket receivedPacket = new DatagramPacket(receivedByteArray, messageLength);
 
         System.out.println("Listening...");
-        socket.receive(receivedPacket);
-        socket.close();
+        try{
+            socket.receive(receivedPacket);
+        }finally {
+            System.out.println("Socket closed.\n");
+            socket.close();
+        }
         return receivedPacket;
     }
 }

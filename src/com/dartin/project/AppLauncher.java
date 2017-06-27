@@ -155,4 +155,10 @@ public class AppLauncher extends Application {
     public void setNewRoot(TreeItem<Object> items) {
         controller.setNewRoot(items);
     }
+
+    public void timeIsOut(){
+        controller.setWaitCollection(false);
+        controller.setStatus("Collection loading error!\n" +
+                "RESEND REQUEST", "red");
+    }
 }
