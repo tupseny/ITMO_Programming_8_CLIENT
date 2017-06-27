@@ -156,9 +156,4 @@ public class AppLauncher extends Application {
         controller.setNewRoot(items);
     }
 
-    public void timeIsOut(){
-        controller.setWaitCollection(false);
-        controller.setStatus("Collection loading error!\n" +
-                "RESEND REQUEST", "red");
-    }
 }
