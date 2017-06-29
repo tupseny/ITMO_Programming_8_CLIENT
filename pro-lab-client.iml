@@ -11,15 +11,19 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Libraries/Item.jar!/" />
-          <root url="jar://$MODULE_DIR$/../../Libraries/ServerMessage.jar!/" />
-          <root url="jar://$MODULE_DIR$/../../Libraries/Tree.jar!/" />
+          <root url="jar://C:/Libraries/Item.jar!/" />
+          <root url="jar://C:/Libraries/ServerMessage.jar!/" />
+          <root url="jar://C:/Libraries/Tree.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../../Libraries/Tree.jar!/javadoc" />
+          <root url="jar://C:/Libraries/Tree.jar!/javadoc" />
         </JAVADOC>
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Item" level="project" />
+    <orderEntry type="library" name="ServerMessage" level="project" />
+    <orderEntry type="library" name="Tree" level="project" />
+    <orderEntry type="library" name="postgresql-42.1.1" level="application" />
   </component>
 </module>
