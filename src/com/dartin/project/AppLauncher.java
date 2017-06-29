@@ -1,5 +1,6 @@
 package com.dartin.project;
 
+import com.dartin.project.client.UserPreferences;
 import com.dartin.project.gui.CollectionOverviewModel;
 import com.dartin.project.gui.NewItemModel;
 import com.dartin.project.gui.controller.CollectionOverviewController;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class AppLauncher extends Application {
@@ -26,6 +29,9 @@ public class AppLauncher extends Application {
     private BorderPane rootLayout;
     private CollectionOverviewController controller;
     private CollectionOverviewModel overviewModel;
+
+    //l10n
+    private ResourceBundle l10nBundle;
 
     private final String WINDOW_TITLE = "ITMO BEST LAB EVER BY 666DEN4UK666 AND XXXAWESOMEMARTINXXX Client"; //lol
     private static final String ip = "178.248.140.168";
@@ -36,6 +42,11 @@ public class AppLauncher extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void init() throws Exception {
+
     }
 
     @Override
@@ -55,6 +66,7 @@ public class AppLauncher extends Application {
         try {
             overviewModel = new CollectionOverviewModel(this, ip);
             FXMLLoader loader = new FXMLLoader();
+            loader.setResources(UserPreferences.localeResources);
             loader.setLocation(AppLauncher.class.getResource("/com/dartin/project/gui/resources/view/collectionOverview.fxml"));
             AnchorPane collectionOverview = loader.load();
 
