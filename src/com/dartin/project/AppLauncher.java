@@ -32,7 +32,7 @@ public class AppLauncher extends Application {
     private static CollectionOverviewModel overviewModel;
 
     private final String WINDOW_TITLE = "ITMO BEST LAB EVER BY 666DEN4UK666 AND XXXAWESOMEMARTINXXX Client"; //lol
-    private static final String ip = "178.248.140.168";
+    private static final String ip = "52.232.45.48";
 
     public static String getIp(){
         return ip;
@@ -113,7 +113,7 @@ public class AppLauncher extends Application {
             stage.showAndWait();
             if (controller.isOkClicked()) {
                 Item item = model.getItem();
-                this.collectionOverviewController.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
+                collectionOverviewController.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
 
             }
         } catch (IOException e) {

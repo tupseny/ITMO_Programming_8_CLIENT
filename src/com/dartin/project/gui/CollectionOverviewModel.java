@@ -91,6 +91,11 @@ public class CollectionOverviewModel {
         if (RequestManager.checkConnection(ip)) {
             try {
                 Set<Item> items = (Set<Item>) RequestManager.requestCollection(ip);
+                if (items == null) {
+                    app.setNewRoot(null);
+                    System.out.println("Set is null!");
+                    return;
+                }
                 System.out.println("Got set: " + items.toString());
                 app.setNewRoot(convertSetToRoot(items));
                 return;
