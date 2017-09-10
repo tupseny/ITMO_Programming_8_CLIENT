@@ -8,31 +8,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../Item/out/artifacts/Item_jar/Item.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../server-message/out/artifacts/server_message_jar/server-message.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../tree-data-structure/out/artifacts/Tree/Tree.jar!/" />
+          <root url="jar://$MODULE_DIR$/Item.jar!/" />
+          <root url="jar://$MODULE_DIR$/server-message.jar!/" />
+          <root url="jar://$MODULE_DIR$/Tree.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../tree-data-structure/out/artifacts/Tree/Tree.jar!/javadoc" />
+          <root url="jar://$MODULE_DIR$/Tree.jar!/javadoc" />
         </JAVADOC>
         <SOURCES />
       </library>
