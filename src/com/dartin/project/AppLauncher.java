@@ -84,7 +84,7 @@ public class AppLauncher extends Application {
             rootLayout = loader.load();
             rootLayoutController = loader.getController();
 
-            Scene scene = new Scene(rootLayout, 800, 600);
+            Scene scene = new Scene(rootLayout, 600, 350);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {

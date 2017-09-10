@@ -1,41 +1,29 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane prefHeight="400.0"
-            prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/8.0.111"
-            fx:controller="com.dartin.project.gui.controller.RootLayoutController"
-            xmlns:fx="http://javafx.com/fxml/1">
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/Base.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dartin.project.gui.controller.RootLayoutController">
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
-			<Menu fx:id="menuFile"
-                  mnemonicParsing="false"
-			      text="%root_file">
-				<MenuItem mnemonicParsing="false"
-				          text="%root_close"/>
+			<Menu fx:id="menuFile" mnemonicParsing="false" text="%root_file">
+				<MenuItem mnemonicParsing="false" text="%root_close" />
 			</Menu>
-			<Menu mnemonicParsing="false"
-			      text="%root_language">
-				<MenuItem mnemonicParsing="false"
-						  text="English (India)"
-                          onAction="#switchLanguage_en_IN"/>
-				<MenuItem mnemonicParsing="false"
-						  text="Eesti"
-                          onAction="#switchLanguage_et"/>
-				<MenuItem mnemonicParsing="false"
-						  text="Shqiptar"
-                          onAction="#switchLanguage_sq"/>
-				<MenuItem mnemonicParsing="false"
-						  text="Русский"
-                          onAction="#switchLanguage_ru"/>
+			<Menu mnemonicParsing="false" text="%root_language">
+				<MenuItem mnemonicParsing="false" onAction="#switchLanguage_en_IN" text="English (India)" />
+				<MenuItem mnemonicParsing="false" onAction="#switchLanguage_et" text="Eesti" />
+				<MenuItem mnemonicParsing="false" onAction="#switchLanguage_sq" text="Shqiptar" />
+				<MenuItem mnemonicParsing="false" onAction="#switchLanguage_ru" text="Русский" />
 			</Menu>
-			<Menu mnemonicParsing="false"
-			      text="%root_help">
-				<MenuItem mnemonicParsing="false"
-				          text="%root_about"/>
+			<Menu mnemonicParsing="false" text="%root_help">
+				<MenuItem mnemonicParsing="false" text="%root_about" />
 			</Menu>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
 		</MenuBar>
 	</top>
 </BorderPane>

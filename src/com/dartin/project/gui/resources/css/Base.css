@@ -1,6 +1,14 @@
 
+.text-field{
+    -fx-background-radius: 3;
+    -fx-border-color: #6993a1;
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+
 /*noinspection ALL*/
-.button{
+.button,.menu{
     -fx-background-color: #ff767e;
     -fx-background-radius: 0;
     -fx-padding: 4 12;
@@ -12,7 +20,12 @@
     -fx-background-color: derive(#ff767e, 20%);
 }
 
-.ToggleButton{
+.button:pressed{
+    -fx-background-color: derive(#ff767e, 50%);
+    -fx-text-fill: gray;
+}
+
+.toggle-button{
     -fx-background-color: yellow;
     -fx-background-radius: 3;
     -fx-pref-width: 80px;
@@ -20,17 +33,17 @@
     -fx-font-family: "Mogra";
 }
 
-.ToggleButton:hover{
+.toggle-button:hover{
     -fx-background-color: derive(yellow, 35%);
 }
 
-.ToggleButton:selected{
+.toggle-button:selected{
     -fx-background-color: derive(yellow, -20%)
 }
 
 /*noinspection ALL*/
-.split-pane {
-    -fx-background-color: derive(-fx-base, 70%);
+.root,.split-pane, .menu-bar {
+    -fx-background-color: #aaebff;
 }
 
 /*noinspection ALL*/
