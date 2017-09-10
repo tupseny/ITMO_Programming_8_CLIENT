@@ -5,6 +5,7 @@ import com.dartin.project.gui.CollectionOverviewModel;
 import com.dartin.project.gui.NewItemModel;
 import com.dartin.project.gui.controller.CollectionOverviewController;
 import com.dartin.project.gui.controller.NewItemController;
+import com.dartin.project.gui.controller.RootLayoutController;
 import com.dartin.project.net.RequestManager;
 import com.dartin.util.Item;
 import javafx.application.Application;
@@ -16,22 +17,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class AppLauncher extends Application {
 
-    private Stage primaryStage;
-    private BorderPane rootLayout;
-    private CollectionOverviewController controller;
-    private CollectionOverviewModel overviewModel;
-
-    //l10n
-    private ResourceBundle l10nBundle;
+    private static Stage primaryStage;
+    private static BorderPane rootLayout;
+    private static CollectionOverviewController collectionOverviewController;
+    private static RootLayoutController rootLayoutController;
+    private static CollectionOverviewModel overviewModel;
 
     private final String WINDOW_TITLE = "ITMO BEST LAB EVER BY 666DEN4UK666 AND XXXAWESOMEMARTINXXX Client"; //lol
     private static final String ip = "178.248.140.168";
@@ -46,7 +44,7 @@ public class AppLauncher extends Application {
 
     @Override
     public void init() throws Exception {
-
+        System.out.println(UserPreferences.localeResources.getString("root_close"));
     }
 
     @Override
@@ -56,8 +54,7 @@ public class AppLauncher extends Application {
         primaryStage.setResizable(false);
         initLayout();
         loadCollectionOverview();
-
-        controller.setWaitCollection(true);
+        collectionOverviewController.setWaitCollection(true);
         overviewModel.getNewRoot();
 
     }
@@ -70,9 +67,8 @@ public class AppLauncher extends Application {
             loader.setLocation(AppLauncher.class.getResource("/com/dartin/project/gui/resources/view/collectionOverview.fxml"));
             AnchorPane collectionOverview = loader.load();
 
-            controller = loader.getController();
-            controller.setModel(overviewModel);
-
+            collectionOverviewController = loader.getController();
+            collectionOverviewController.setModel(overviewModel);
             rootLayout.setCenter(collectionOverview);
 
         } catch (IOException e) {
@@ -80,11 +76,13 @@ public class AppLauncher extends Application {
         }
     }
 
-    private void initLayout() {
+    public static void initLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setResources(UserPreferences.localeResources);
             loader.setLocation(AppLauncher.class.getResource("/com/dartin/project/gui/resources/view/rootLayout.fxml"));
             rootLayout = loader.load();
+            rootLayoutController = loader.getController();
 
             Scene scene = new Scene(rootLayout, 800, 600);
             primaryStage.setScene(scene);
@@ -99,6 +97,7 @@ public class AppLauncher extends Application {
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(getClass().getResource("/com/dartin/project/gui/resources/view/newItem.fxml"));
+            loader.setResources(UserPreferences.localeResources);
             AnchorPane layout = loader.load();
             Stage stage = new Stage();
             Scene scene = new Scene(layout);
@@ -114,7 +113,7 @@ public class AppLauncher extends Application {
             stage.showAndWait();
             if (controller.isOkClicked()) {
                 Item item = model.getItem();
-                this.controller.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
+                this.collectionOverviewController.setTreeRoot(CollectionOverviewModel.convertSetToRoot(RequestManager.sendRequest(item, ip, true)));
 
             }
         } catch (IOException e) {
@@ -142,7 +141,7 @@ public class AppLauncher extends Application {
                 (String) map.get("name"),
                 (String) map.get("usage"),
                 Item.Size.valueOf(map.get("size").toString().toUpperCase()),
-                OffsetDateTime.now()
+                LocalDate.now()
         );
     }
 
@@ -159,7 +158,25 @@ public class AppLauncher extends Application {
     }
 
     public void setNewRoot(TreeItem<Object> items) {
-        controller.setNewRoot(items);
+        collectionOverviewController.setNewRoot(items);
+    }
+
+    public static void redraw() {
+        initLayout();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setResources(UserPreferences.localeResources);
+        loader.setLocation(AppLauncher.class.getResource("/com/dartin/project/gui/resources/view/collectionOverview.fxml"));
+        AnchorPane collectionOverview = null;
+        try {
+            collectionOverview = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        collectionOverviewController = loader.getController();
+        collectionOverviewController.setModel(overviewModel);
+        rootLayout.setCenter(collectionOverview);
+
     }
 
 }

@@ -1,31 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-
-
 <BorderPane prefHeight="400.0"
             prefWidth="600.0"
             xmlns="http://javafx.com/javafx/8.0.111"
+            fx:controller="com.dartin.project.gui.controller.RootLayoutController"
             xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
-			<Menu mnemonicParsing="false"
-			      text="File">
+			<Menu fx:id="menuFile"
+                  mnemonicParsing="false"
+			      text="%root_file">
 				<MenuItem mnemonicParsing="false"
-				          text="Close"/>
+				          text="%root_close"/>
 			</Menu>
 			<Menu mnemonicParsing="false"
-			      text="Edit">
+			      text="%root_language">
 				<MenuItem mnemonicParsing="false"
-				          text="Delete"/>
+						  text="English (India)"
+                          onAction="#switchLanguage_en_IN"/>
+				<MenuItem mnemonicParsing="false"
+						  text="Eesti"
+                          onAction="#switchLanguage_et"/>
+				<MenuItem mnemonicParsing="false"
+						  text="Shqiptar"
+                          onAction="#switchLanguage_sq"/>
+				<MenuItem mnemonicParsing="false"
+						  text="Русский"
+                          onAction="#switchLanguage_ru"/>
 			</Menu>
 			<Menu mnemonicParsing="false"
-			      text="Help">
+			      text="%root_help">
 				<MenuItem mnemonicParsing="false"
-				          text="About"/>
+				          text="%root_about"/>
 			</Menu>
 		</MenuBar>
 	</top>

@@ -1,6 +1,7 @@
 package com.dartin.project.gui;
 
 import com.dartin.project.AppLauncher;
+import com.dartin.project.client.UserPreferences;
 import com.dartin.project.exception.NotValidSizeException;
 import com.dartin.util.Item;
 import javafx.util.StringConverter;
@@ -66,7 +67,7 @@ public class NewItemModel {
         List<Item.Size> list = Arrays.asList(Item.Size.values());
         value -= 1;
         for (Item.Size size : list) {
-            if (list.indexOf(size) == (int) value) return size.toString();
+            if (list.indexOf(size) == (int) value) return UserPreferences.localeResources.getString(size.toString());
         }
         throw new NotValidSizeException("Cant find size with index " + (int) value);
     }

@@ -8,22 +8,34 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://C:/Libraries/Item.jar!/" />
-          <root url="jar://C:/Libraries/ServerMessage.jar!/" />
-          <root url="jar://C:/Libraries/Tree.jar!/" />
+          <root url="jar://$MODULE_DIR$/../Item/out/artifacts/Item_jar/Item.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../server-message/out/artifacts/server_message_jar/server-message.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../tree-data-structure/out/artifacts/Tree/Tree.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://C:/Libraries/Tree.jar!/javadoc" />
+          <root url="jar://$MODULE_DIR$/../tree-data-structure/out/artifacts/Tree/Tree.jar!/javadoc" />
         </JAVADOC>
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Item" level="project" />
-    <orderEntry type="library" name="ServerMessage" level="project" />
-    <orderEntry type="library" name="Tree" level="project" />
-    <orderEntry type="library" name="postgresql-42.1.1" level="application" />
   </component>
 </module>

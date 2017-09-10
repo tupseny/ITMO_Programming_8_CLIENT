@@ -176,7 +176,6 @@ public class NewItemController {
         ObservableList<String> list = FXCollections.observableArrayList(
                 "Wear", "Throw", "Eat");
 
-
         textFieldName.setPromptText("NAME");
         datePicker.setValue(LocalDate.now());
         choiceBoxUsage.setItems(list);
