@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Martin on 25.06.2017.
  */
 public class RequestManager{
-    private static final int DEFAULT_TIMEOUT = 1000;
+    private static final int DEFAULT_TIMEOUT = 10000;
 
     public static String requestStory(String ip, int port, int timeout){
         ServerMessage message = new ServerMessage(ServerMessage.CMD_RUN);

@@ -23,7 +23,7 @@ public class UserPreferences {
 	public static final String USER_LOCALE = "user_locale";
 	public static final String DEFAULT_LOCALE = "default_locale";
 
-	public static Preferences userPrefs;
+	public static volatile Preferences userPrefs;
 	public static ResourceBundle localeResources;
 
 	static {

@@ -120,6 +120,7 @@ public class NewItemController {
 */
 package com.dartin.project.gui.controller;
 
+import com.dartin.project.client.UserPreferences;
 import com.dartin.project.gui.NewItemModel;
 import com.dartin.util.Item;
 import javafx.collections.FXCollections;
@@ -128,9 +129,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -153,6 +157,8 @@ public class NewItemController {
     private Button okBut;
     @FXML
     private Button cancelBut;
+
+    private DateTimeFormatter formatter;
 
     @FXML
     private void handleButtonOk(ActionEvent actionEvent) {
@@ -178,6 +184,22 @@ public class NewItemController {
 
         textFieldName.setPromptText("NAME");
         datePicker.setValue(LocalDate.now());
+        datePicker.setConverter(new StringConverter<LocalDate>() {
+                @Override
+                public String toString(LocalDate localDate) {
+                    System.out.println(localDate);
+                    return localDate.format(
+                            DateTimeFormatter.ofPattern(
+                                    UserPreferences.localeResources.getString("time_format")
+                            )
+                    );
+                }
+
+                @Override
+                public LocalDate fromString(String s) {
+                    return LocalDate.parse(s);
+                }
+            });
         choiceBoxUsage.setItems(list);
         choiceBoxUsage.setValue(choiceBoxUsage.getItems().get(0).toString());
     }
